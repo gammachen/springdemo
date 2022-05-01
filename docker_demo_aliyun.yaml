@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dockertest
+  namespace: default
+  labels:
+    app: dockertest
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    nodePort: 30190
+  selector:
+    app: dockertest
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dockertest
+  labels:
+    app: dockertest
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: dockertest
+  template:
+    metadata:
+      labels:
+        app: dockertest
+    spec:
+      containers:
+      - name: dockertest
+        image: registry.cn-hangzhou.aliyuncs.com/myth-test/sfimg:demo_lates
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+
